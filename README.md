@@ -2,10 +2,12 @@
 
 Personal portfolio of Ganasiri M M: a scroll-led single page where scrolling drives the story, mostly vertically, with one pinned section that moves sideways.
 
+Live at **https://ganasiri.github.io**
+
 ## Branches
 
-- `main` — base branch.
-- `code-ganasiri` — working branch. All changes are made here and merged into `main` via pull request.
+- `main`: the live site. Anything merged here is deployed automatically.
+- `code-ganasiri`: working branch. All changes are made here and merged into `main` via pull request.
 
 ## Run it
 
@@ -72,7 +74,9 @@ public/
 
 ## Deploying
 
-`npm run build` writes a static site to `dist/`, which any static host can serve (Vercel, Netlify, GitHub Pages). If the site will live under a sub-path rather than at the domain root, set `base` in `vite.config.ts` to that path first, e.g. `base: '/portfolio/'`.
+GitHub Pages serves the site from this repository at https://ganasiri.github.io. Every push to `main`, which includes every merged pull request, runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). It installs dependencies, runs `npm run build` and publishes `dist/`. You can follow each deploy in the repository's Actions tab, and redeploy by hand there with "Run workflow".
+
+The site sits at the domain root, so `base` in `vite.config.ts` stays at its default of `/`.
 
 ## Credits
 
