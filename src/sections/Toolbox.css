@@ -28,12 +28,12 @@
 
 .toolbox__word {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
 }
 
+/* A full stop after each name, solid burgundy even on the outlined rows. */
 .toolbox__sep {
-  margin-inline: 0.35em;
-  font-size: 0.4em;
+  margin-inline-end: 0.4em;
   color: var(--accent);
   -webkit-text-stroke: 0;
 }
