@@ -65,7 +65,7 @@ export function Toolbox() {
               {[...row, ...row, ...row].map((tool, j) => (
                 <span key={j} className="toolbox__word">
                   {tool}
-                  <span className="toolbox__sep">✳</span>
+                  <span className="toolbox__sep">.</span>
                 </span>
               ))}
             </div>
