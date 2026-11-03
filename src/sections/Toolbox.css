@@ -20,10 +20,14 @@
   letter-spacing: -0.045em;
 }
 
-/* Alternate rows are outlined for rhythm. */
+/* Alternate rows are outlined for rhythm. The stroke is painted first and
+   a butter fill on top, which hides the lines where the variable font's
+   letter shapes overlap (boxes inside A, e, t). The fill also covers the
+   inner half of the stroke, so 2px leaves a 1px outline. */
 .toolbox__row:nth-child(even) .toolbox__word {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--fg);
+  color: var(--bg);
+  -webkit-text-stroke: 2px var(--fg);
+  paint-order: stroke fill;
 }
 
 .toolbox__word {
