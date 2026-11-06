@@ -197,12 +197,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           decoding="async"
         />
         {project.status && (
-          <p className={`work-card__badge is-${project.status}`}>
+          <p className={`work-card__badge is-${project.status} glass glass-blur`}>
             <span className="work-card__badge-dot" aria-hidden="true" />
             {paperStatus[project.status]}
           </p>
         )}
-        <p className="work-card__metric">
+        <p className="work-card__metric glass glass-blur">
           <strong>{project.metric.value}</strong>
           <span className="mono">{project.metric.label}</span>
         </p>

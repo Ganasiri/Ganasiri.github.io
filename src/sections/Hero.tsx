@@ -161,7 +161,7 @@ export function Hero({ play, onSceneReady }: Props) {
 
         <div className="hero__footer">
           <div className="hero__footer-inner mono hero__reveal">
-            <span className="hero__scroll">
+            <span className="hero__scroll glass glass-blur">
               <span className="hero__scroll-line" aria-hidden="true" />
               Scroll to explore
             </span>

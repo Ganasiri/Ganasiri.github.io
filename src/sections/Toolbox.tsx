@@ -75,7 +75,7 @@ export function Toolbox() {
 
       <div className="container toolbox__groups">
         {skills.map((group) => (
-          <div key={group.title} className="toolbox__group">
+          <div key={group.title} className="toolbox__group glass">
             <h3 className="toolbox__group-title mono">{group.title}</h3>
             <ul className="toolbox__list">
               {group.items.map((item) => (
@@ -84,7 +84,7 @@ export function Toolbox() {
             </ul>
           </div>
         ))}
-        <div className="toolbox__group">
+        <div className="toolbox__group glass">
           <h3 className="toolbox__group-title mono">Certifications</h3>
           <ul className="toolbox__list">
             {certifications.map((item) => (

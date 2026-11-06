@@ -81,7 +81,7 @@ export function Experience() {
           </span>
           <ol className="experience__list">
             {experience.map((item) => (
-              <li key={item.period} className="milestone">
+              <li key={item.period} className="milestone glass">
                 <span className="milestone__dot" aria-hidden="true" />
                 <p className="milestone__period mono">{item.period}</p>
                 <h3 className="milestone__title">{item.title}</h3>

@@ -35,13 +35,17 @@ html.has-custom-cursor * {
   margin: -20px 0 0 -20px;
 }
 
+/* A small glass lens that brightens what it passes over. */
 .cursor__ring-shape {
   grid-area: 1 / 1;
   width: 100%;
   height: 100%;
-  border: 1px solid var(--fg);
+  border: 1px solid rgb(255 255 255 / 0.4);
   border-radius: 50%;
-  opacity: 0.55;
+  background: rgb(255 255 255 / 0.04);
+  -webkit-backdrop-filter: blur(2px) saturate(150%) brightness(1.15);
+  backdrop-filter: blur(2px) saturate(150%) brightness(1.15);
+  opacity: 0.8;
   transition:
     transform 0.45s var(--ease-out),
     background-color 0.3s ease,
@@ -57,8 +61,8 @@ html.has-custom-cursor * {
 
 .cursor__ring.has-label .cursor__ring-shape {
   transform: scale(2.3);
-  border-color: transparent;
-  background: var(--accent);
+  border-color: rgb(255 255 255 / 0.22);
+  background: var(--wine-strong);
   opacity: 1;
 }
 
@@ -78,7 +82,7 @@ html.has-custom-cursor * {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--bg);
+  color: var(--fg);
   opacity: 0;
   transform: scale(0.6);
   transition:

@@ -30,17 +30,18 @@
 .about__stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: clamp(0.75rem, 1.4vw, 1.25rem);
   margin-top: clamp(4rem, 12vh, 8rem);
 }
 
+/* Each number sits on its own glass tile, like a widget. */
 .about__stat {
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
   gap: 0.9rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
+  padding: clamp(1.1rem, 2vw, 1.75rem);
+  border-radius: var(--radius);
 }
 
 .about__stat-number {
@@ -91,7 +92,6 @@
 @media (max-width: 899px) {
   .about__stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 2.5rem;
   }
 }
 

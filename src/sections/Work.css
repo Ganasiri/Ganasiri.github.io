@@ -83,7 +83,7 @@
   height: var(--frame-h);
   overflow: hidden;
   border-radius: var(--radius);
-  background: var(--navy-deep);
+  background: var(--ink-raised);
 }
 
 .work-card__image {
@@ -114,7 +114,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+  color: var(--fg);
 }
 
 .work-card__badge-dot {
@@ -123,50 +123,51 @@
   border-radius: 50%;
 }
 
-/* Published: solid burgundy with butter text, so the papers stand out.
-   Accepted: outlined in butter with a hollow dot, since it isn't out yet. */
+/* Published: wine-tinted glass with a solid dot, so the papers stand out.
+   Accepted: clear glass with a hollow dot, since it isn't out yet. */
 .work-card__badge.is-published {
-  background: var(--burgundy);
-  color: var(--butter);
+  background-color: var(--wine);
 }
 
 .work-card__badge.is-published .work-card__badge-dot {
-  background: var(--butter);
+  background: var(--fg);
 }
 
 .work-card__badge.is-accepted {
-  border: 1px solid var(--butter);
-  background: rgb(15 38 58 / 0.85);
-  color: var(--butter);
-  backdrop-filter: blur(6px);
+  background-color: var(--glass-tint);
 }
 
 .work-card__badge.is-accepted .work-card__badge-dot {
-  border: 1.5px solid var(--butter);
+  border: 1.5px solid var(--fg);
 }
 
+/* The headline number floats on a glass bar inset from the image edges;
+   its corners follow the frame's (outer radius minus the inset). */
 .work-card__metric {
+  --inset: clamp(0.6rem, 1.2vw, 0.9rem);
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: var(--inset);
+  right: var(--inset);
+  bottom: var(--inset);
   display: flex;
   align-items: baseline;
-  gap: 0.9rem;
-  padding: 3rem clamp(1rem, 2vw, 1.75rem) clamp(1rem, 2vw, 1.5rem);
-  background: linear-gradient(to top, rgb(15 38 58 / 0.92), transparent);
-  color: var(--butter);
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  padding: clamp(0.8rem, 1.4vw, 1.1rem) clamp(1rem, 1.8vw, 1.4rem);
+  border-radius: calc(var(--radius) - var(--inset));
+  background-color: var(--glass-tint);
+  color: var(--fg);
 }
 
 .work-card__metric strong {
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
   font-weight: 600;
   line-height: 0.9;
   letter-spacing: -0.045em;
 }
 
 .work-card__metric .mono {
-  color: rgb(243 237 221 / 0.8);
+  color: rgb(230 227 220 / 0.78);
 }
 
 .work-card__info {
@@ -260,8 +261,9 @@
 
 .work-card__tools li {
   padding: 0.35rem 0.65rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--chip-border);
   border-radius: 999px;
+  background: var(--chip-fill);
   font-size: 0.64rem;
   color: var(--muted);
 }
