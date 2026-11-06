@@ -53,7 +53,7 @@ All text lives in [`src/content.ts`](src/content.ts), so you never need to touch
 | Toolbox | Rows of tool names slide in opposite directions |
 | Contact | Headline lines slide up; the button leans towards the cursor |
 
-The site uses a soft dark theme: graphite (#17191D) rather than black behind every section, warm off-white (#E6E3DC) text, and rose (#DF7A95, burgundy lifted for dark backgrounds) as the one pop colour for italic headline words, numbers and indicators. The navigation bar, cards, badges and the email button are glass in the style of iOS 27: a tinted, blurred fill with a lit rim and a soft shadow, added with the `glass` and `glass-blur` classes. Glass turns solid when a visitor's system asks for reduced transparency. Colours and glass settings are at the top of `src/index.css`.
+The site uses a soft dark theme: graphite (#1E2126) rather than black behind every section, warm off-white (#E6E3DC) text, and steel blue (#6A90B4) as the one pop colour for italic headline words, numbers and indicators. The navigation bar, cards, badges and the email button are glass in the style of iOS 27: a tinted, blurred fill with a lit rim and a soft shadow, added with the `glass` and `glass-blur` classes. Glass turns solid when a visitor's system asks for reduced transparency. Colours and glass settings are at the top of `src/index.css`.
 
 Smooth scrolling uses [Lenis](https://github.com/darkroomengineering/lenis), and the animations use [GSAP](https://gsap.com) ScrollTrigger and SplitText. If a visitor's system asks for reduced motion, the scroll animations are switched off, the Work row becomes a normal sideways scroller and the 3D scene stays still.
 

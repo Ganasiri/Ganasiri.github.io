@@ -24,9 +24,10 @@
   border-radius: var(--radius);
   overflow: hidden;
   transform-origin: 50% 0;
-  /* Dense glass: the card underneath shows through only as a soft blur,
-     and the lit top rim marks where each new card begins. */
-  background-color: var(--glass-tint-dense);
+  /* Solid glass: an opaque fill keeps the stacked cards apart without a
+     live backdrop blur, which had to be redrawn over the whole card on
+     every frame as it scaled. The lit rim, sheen and inner glow stay. */
+  background-color: #262a30;
 }
 
 .service-card__top {

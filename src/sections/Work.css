@@ -123,10 +123,10 @@
   border-radius: 50%;
 }
 
-/* Published: wine-tinted glass with a solid dot, so the papers stand out.
+/* Published: deep blue glass with a solid dot, so the papers stand out.
    Accepted: clear glass with a hollow dot, since it isn't out yet. */
 .work-card__badge.is-published {
-  background-color: var(--wine);
+  background-color: var(--accent-fill);
 }
 
 .work-card__badge.is-published .work-card__badge-dot {

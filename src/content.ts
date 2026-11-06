@@ -61,14 +61,23 @@ export const profile = {
   displayName: 'Ganasiri',
   role: 'Product Analyst',
   /** Cycles after the role in the hero. */
-  focus: ['Data Analytics', 'Artificial Intelligence', 'Data Science'],
-  intro: 'I turn product data into decisions, and build AI that people can *trust*.',
+  focus: ['Product Analytics', 'Artificial Intelligence', 'Data Science'],
   location: 'Bengaluru, India',
   email: 'mmganasiri30@gmail.com',
   /** Profiles listed under "Elsewhere" in Contact; the block hides when empty. */
   links: [
     // { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-handle' },
   ] as Link[],
+}
+
+/** Hero widget labels. The widgets' facts come from `experience`,
+ *  `about.stats` and `projects`, so they stay in step. */
+export const hero = {
+  widgets: {
+    now: 'Currently',
+    impact: 'Impact',
+    research: 'Research',
+  },
 }
 
 /** In-page navigation. Each id must match a section id. */
