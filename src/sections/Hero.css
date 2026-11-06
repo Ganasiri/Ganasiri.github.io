@@ -37,20 +37,17 @@
   gap: clamp(1.25rem, 3.5vh, 2.5rem);
 }
 
-/* The copy spans the name's width (80% of the line, see useFitText), so
-   the intro's right edge lines up with the last letter. */
+/* Role, then intro, stacked under the name as one block. */
 .hero__copy {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 2rem;
-  max-width: 80%;
+  justify-items: start;
+  gap: clamp(1.25rem, 3vh, 2rem);
 }
 
 .hero__role {
   display: flex;
   flex-direction: column;
-  font-size: clamp(1.5rem, 2.6vw, 2.6rem);
+  font-size: clamp(1.8rem, 3.12vw, 3.12rem);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -78,7 +75,6 @@
 }
 
 .hero__intro {
-  justify-self: end;
   max-width: 28ch;
   font-size: clamp(1.05rem, 1.4vw, 1.35rem);
   line-height: 1.45;
@@ -155,19 +151,6 @@
   100% {
     transform: scaleX(0);
     transform-origin: right center;
-  }
-}
-
-@media (max-width: 767px) {
-  /* Copy stacks under the name. */
-  .hero__copy {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    max-width: none;
-  }
-
-  .hero__intro {
-    justify-self: start;
   }
 }
 

@@ -20,8 +20,9 @@ export function Hero({ play, onSceneReady }: Props) {
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const reducedMotion = useReducedMotion()
 
-  // 20% smaller than full width, so the name leaves room for the scene.
-  useFitText(nameRef, 0.46, 0.8)
+  // Just under half the line (80% of full width, then 40% smaller), so the
+  // name leaves room for the role and the scene.
+  useFitText(nameRef, 0.46, 0.48)
 
   useGSAP(
     () => {
