@@ -20,11 +20,11 @@ export function Hero({ play, onSceneReady }: Props) {
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const reducedMotion = useReducedMotion()
 
-  // With widgets beside it, the name spans three quarters of its column,
+  // With widgets beside it, the name spans just under 60% of its column,
   // which keeps it near half the screen width. Stacked on smaller screens,
-  // it takes 60% of the line.
+  // it takes about half the line.
   const twoColumn = useMediaQuery('(min-width: 1024px)')
-  useFitText(nameRef, 0.46, twoColumn ? 0.75 : 0.6)
+  useFitText(nameRef, 0.46, twoColumn ? 0.59 : 0.51)
 
   useGSAP(
     () => {
