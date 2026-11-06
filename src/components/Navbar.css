@@ -30,6 +30,8 @@
   padding-inline: 1.4rem 1.6rem;
   border-radius: 999px;
   background-color: var(--glass-tint);
+  /* The bar itself catches the pointer, so its glass lights up and leans. */
+  pointer-events: auto;
 }
 
 .nav a {

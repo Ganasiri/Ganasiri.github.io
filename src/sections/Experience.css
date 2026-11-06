@@ -78,7 +78,9 @@
   padding: var(--milestone-pad);
   border-radius: var(--radius);
   opacity: 0.38;
-  transition: opacity 0.6s var(--ease-out);
+  transition:
+    opacity 0.6s var(--ease-out),
+    var(--glass-motion);
 }
 
 .milestone.is-reached {

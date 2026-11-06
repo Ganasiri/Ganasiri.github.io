@@ -59,9 +59,33 @@
   --radius: clamp(1.25rem, 2.4vw, 2.125rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* A spring that overshoots and settles, so glass wobbles like liquid. */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --glass-motion:
+    scale 0.9s var(--ease-spring),
+    translate 0.9s var(--ease-spring),
+    --lit 0.6s ease;
 
   color-scheme: dark;
   scrollbar-gutter: stable;
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(
+      0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121,
+      1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%,
+      0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1
+    );
+  }
+}
+
+/* How lit a glass surface is by the pointer, 0 to 1. Registered so it can
+   fade, and inherited so the rim and highlight layers can read it. */
+@property --lit {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
 }
 
 /* Reduce Transparency: glass becomes solid, slightly raised surfaces. */
@@ -129,6 +153,27 @@ body::before {
   z-index: -1;
   background: var(--ambient);
   pointer-events: none;
+}
+
+/* The light pools drift slowly, so what shows through the glass keeps
+   moving. The layer stays scaled up by at least the drift, so its edges
+   never come into view. */
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    animation: ambient-drift 40s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes ambient-drift {
+  0% {
+    transform: scale(1.12) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.16) translate3d(-3%, 2.5%, 0);
+  }
+  100% {
+    transform: scale(1.12) translate3d(2.5%, -2%, 0);
+  }
 }
 
 h1,
@@ -244,21 +289,54 @@ section:focus {
   position: relative;
   background-color: var(--glass-fill);
   background-image: var(--glass-sheen);
+  /* Inner shadows give the glass thickness: a bright lip along the top, a
+     soft glow pooled under it, light caught along the bottom as if it had
+     passed through, and a darker line where the bottom edge curves away. */
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    inset 0 -1px 0 rgb(0 0 0 / 0.22),
+    inset 0 16px 28px -22px rgb(255 255 255 / 0.2),
+    inset 0 -18px 30px -24px rgb(255 255 255 / 0.1),
     0 0 0 1px var(--glass-edge),
     var(--glass-drop);
+  transition: var(--glass-motion);
+}
+
+/* A soft light that follows the pointer across the surface (see
+   LiquidGlass), like a highlight sliding over a drop of water. */
+:where(.glass)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    18rem circle at var(--lx, 50%) var(--ly, 0%),
+    rgb(255 255 255 / calc(var(--lit) * 0.09)),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+:where(.glass.is-lit) {
+  --lit: 1;
 }
 
 /* The lit rim: a 1px gradient ring drawn with a mask, so it follows the
-   corner radius and leaves the translucent fill untouched. */
+   corner radius and leaves the translucent fill untouched. Near the
+   pointer it brightens, as an edge of glass flares when light hits it. */
 :where(.glass)::after {
   content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: var(--glass-rim);
+  background:
+    radial-gradient(
+      9rem circle at var(--lx, 50%) var(--ly, 0%),
+      rgb(255 255 255 / calc(var(--lit) * 0.7)),
+      transparent 80%
+    ),
+    var(--glass-rim);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -274,6 +352,13 @@ section:focus {
 :where(.glass-blur) {
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
+}
+
+/* In Chromium, blurred glass also bends what's behind it along its curved
+   edge (an SVG displacement map per surface, see LiquidGlass). The blur is
+   lighter here so the bending stays visible; the tint keeps text legible. */
+:where(.has-refraction .glass-blur) {
+  backdrop-filter: var(--glass-refract, ) blur(10px) saturate(180%) brightness(1.05);
 }
 
 /* --------------------------- Utilities -------------------------- */
