@@ -42,8 +42,9 @@
   width: clamp(9rem, 15vw, 13rem);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--burgundy);
-  color: var(--butter);
+  /* Wine-tinted glass, like iOS's prominent glass buttons. */
+  background-color: var(--wine);
+  color: var(--fg);
   font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -55,7 +56,7 @@
 }
 
 .contact__cta:hover {
-  background: var(--burgundy-deep);
+  background-color: var(--wine-strong);
 }
 
 .contact__details {
@@ -70,8 +71,8 @@
   align-content: start;
   justify-items: start;
   gap: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  border-radius: var(--radius);
 }
 
 .contact__detail-label {
@@ -89,16 +90,17 @@
 .contact__copy {
   padding: 0.5rem 0.9rem;
   margin-top: 0.25rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--chip-border);
   border-radius: 999px;
+  background: var(--chip-fill);
   transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    border-color 0.3s ease;
 }
 
 .contact__copy:hover {
-  background: var(--fg);
-  color: var(--bg);
+  border-color: rgb(255 255 255 / 0.22);
+  background: rgb(255 255 255 / 0.12);
 }
 
 .contact__links {

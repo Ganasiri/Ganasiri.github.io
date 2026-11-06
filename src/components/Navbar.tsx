@@ -39,35 +39,38 @@ export function Navbar() {
 
   return (
     <header className="nav">
-      <a
-        href="#home"
-        className="nav__brand"
-        aria-label={`${profile.name}, back to top`}
-        onClick={(event) => goTo(event, 'home')}
-      >
-        <span className="nav__brand-full">{profile.displayName}</span>
-        <span className="nav__brand-short" aria-hidden="true">
-          {profile.displayName.charAt(0)}.
-        </span>
-        <sup aria-hidden="true">©</sup>
-      </a>
+      {/* A floating glass bar, as in iOS 27. */}
+      <div className="nav__bar glass glass-blur">
+        <a
+          href="#home"
+          className="nav__brand"
+          aria-label={`${profile.name}, back to top`}
+          onClick={(event) => goTo(event, 'home')}
+        >
+          <span className="nav__brand-full">{profile.displayName}</span>
+          <span className="nav__brand-short" aria-hidden="true">
+            {profile.displayName.charAt(0)}.
+          </span>
+          <sup aria-hidden="true">©</sup>
+        </a>
 
-      <nav aria-label="Sections">
-        <ul className="nav__links">
-          {navigation.map(({ id, label }) => (
-            <li key={id}>
-              <a
-                href={`#${id}`}
-                className={`nav__link mono${active === id ? ' is-active' : ''}`}
-                aria-current={active === id ? 'true' : undefined}
-                onClick={(event) => goTo(event, id)}
-              >
-                <RollingText>{label}</RollingText>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+        <nav aria-label="Sections">
+          <ul className="nav__links">
+            {navigation.map(({ id, label }) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  className={`nav__link mono${active === id ? ' is-active' : ''}`}
+                  aria-current={active === id ? 'true' : undefined}
+                  onClick={(event) => goTo(event, id)}
+                >
+                  <RollingText>{label}</RollingText>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </header>
   )
 }

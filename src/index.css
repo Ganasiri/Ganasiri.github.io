@@ -1,22 +1,52 @@
 /* ------------------------------------------------------------------
-   Butter background, navy for text and cards, and burgundy as the one
-   pop colour: italic headline words, numbers, indicators and the main
-   button. Burgundy is 6.6:1 on butter, so it works as text too.
+   A soft dark theme: graphite rather than black, warm off-white text,
+   and rose (burgundy lifted for dark backgrounds) as the one pop colour.
+   Text is 13.7:1 on the page, muted text 6.3:1 and rose 6.2:1.
+
+   Surfaces are glass in the style of iOS 27: a tinted, blurred fill, a
+   lit rim brightest along the top, a darkened outer edge for separation
+   and a soft drop shadow. Two faint pools of light sit behind the page
+   so the glass has something to catch.
    ------------------------------------------------------------------ */
 :root {
-  --navy: #16324b;
-  --navy-deep: #0f263a;
-  --navy-raised: #1e3f5c;
-  --butter: #f3eddd;
-  --burgundy: #9b1d42;
-  --burgundy-deep: #7f1736;
+  --ink: #1e2126;
+  --ink-raised: #24272d;
+  --snow: #e6e3dc;
+  --rose: #df7a95;
+  /* Filled pop surfaces (main button, published badge) use wine glass. */
+  --wine: rgb(155 29 66 / 0.62);
+  --wine-strong: rgb(155 29 66 / 0.8);
 
-  --bg: var(--butter);
-  --fg: var(--navy);
-  /* Secondary text, still 5.5:1 on butter. */
-  --muted: rgb(22 50 75 / 0.75);
-  --line: rgb(22 50 75 / 0.18);
-  --accent: var(--burgundy);
+  --bg: var(--ink);
+  --fg: var(--snow);
+  --muted: rgb(230 227 220 / 0.64);
+  --line: rgb(230 227 220 / 0.12);
+  --accent: var(--rose);
+
+  --ambient:
+    radial-gradient(60vmax 44vmax at 96% -8%, rgb(155 29 66 / 0.16), transparent 70%),
+    radial-gradient(56vmax 46vmax at -10% 108%, rgb(48 84 124 / 0.2), transparent 70%);
+
+  /* Glass. The fill is for surfaces on the plain page; the tints are for
+     glass over busy content (bars over the page, labels over images, cards
+     stacked on cards), where more diffusion keeps text readable. */
+  --glass-fill: rgb(255 255 255 / 0.055);
+  --glass-tint: rgb(30 32 37 / 0.55);
+  --glass-tint-dense: rgb(32 34 39 / 0.76);
+  --glass-blur: blur(24px) saturate(170%);
+  --glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 45%);
+  --glass-rim: linear-gradient(
+    165deg,
+    rgb(255 255 255 / 0.34),
+    rgb(255 255 255 / 0.08) 24%,
+    rgb(255 255 255 / 0.03) 55%,
+    rgb(255 255 255 / 0.12)
+  );
+  --glass-edge: rgb(0 0 0 / 0.42);
+  --glass-drop: 0 24px 48px -28px rgb(0 0 0 / 0.75);
+  /* Small pills (tags, tools, skills) get a lighter version. */
+  --chip-fill: rgb(255 255 255 / 0.05);
+  --chip-border: rgb(255 255 255 / 0.1);
 
   --font-sans: 'Inter Tight Variable', 'Inter Tight', system-ui, sans-serif;
   --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
@@ -25,12 +55,44 @@
   --pad: clamp(1.25rem, 4vw, 3.5rem);
   --nav-h: 4.5rem;
   --section-space: clamp(6rem, 16vh, 12rem);
-  --radius: clamp(1rem, 2vw, 1.75rem);
+  /* Large glass panels round to 34px, as in iOS 27. */
+  --radius: clamp(1.25rem, 2.4vw, 2.125rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
-  color-scheme: light;
+  color-scheme: dark;
   scrollbar-gutter: stable;
+}
+
+/* Reduce Transparency: glass becomes solid, slightly raised surfaces. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-fill: #23262b;
+    --glass-tint: #23262b;
+    --glass-tint-dense: #23262b;
+    --glass-blur: none;
+    --wine: #6b1b34;
+    --wine-strong: #7d1f3c;
+    --ambient: none;
+  }
+}
+
+/* Increase Contrast: brighter rims and lines. */
+@media (prefers-contrast: more) {
+  :root {
+    --muted: rgb(230 227 220 / 0.8);
+    --line: rgb(230 227 220 / 0.3);
+    --chip-border: rgb(255 255 255 / 0.3);
+    --glass-rim: linear-gradient(rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.3));
+  }
+}
+
+/* Without backdrop blur, tinted glass needs to be denser to stay legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass-tint: rgb(30 32 37 / 0.92);
+    --glass-tint-dense: rgb(32 34 39 / 0.96);
+  }
 }
 
 /* While the loader is on screen nothing should scroll. */
@@ -57,6 +119,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* The pools of light stay put while the page scrolls over them. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--ambient);
+  pointer-events: none;
 }
 
 h1,
@@ -106,8 +178,8 @@ em {
 }
 
 ::selection {
-  background: var(--burgundy);
-  color: var(--butter);
+  background: var(--rose);
+  color: var(--ink);
 }
 
 :focus-visible {
@@ -163,6 +235,45 @@ section:focus {
 .reveal-line-mask {
   padding-bottom: 0.1em;
   margin-bottom: -0.1em;
+}
+
+/* ----------------------------- Glass ---------------------------- */
+/* :where() keeps these at zero specificity, so any component can change
+   the fill, radius or position without fighting the utility. */
+:where(.glass) {
+  position: relative;
+  background-color: var(--glass-fill);
+  background-image: var(--glass-sheen);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 1px var(--glass-edge),
+    var(--glass-drop);
+}
+
+/* The lit rim: a 1px gradient ring drawn with a mask, so it follows the
+   corner radius and leaves the translucent fill untouched. */
+:where(.glass)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--glass-rim);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* Blur only where something busy passes behind the glass; over the plain
+   page it would cost frames and look the same. */
+:where(.glass-blur) {
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 /* --------------------------- Utilities -------------------------- */

@@ -54,7 +54,7 @@ export function Services() {
         <ol className="services__list">
           {services.map((service, i) => (
             <li key={service.title} className="service-card" style={{ '--i': i } as CSSProperties}>
-              <article className="service-card__inner">
+              <article className="service-card__inner glass glass-blur">
                 <div className="service-card__top">
                   <span className="service-card__index mono">{String(i + 1).padStart(2, '0')}</span>
                   <ul className="service-card__tags" aria-label="Tools">

@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import {
+  AdditiveBlending,
   BufferAttribute,
   BufferGeometry,
   Color,
-  NormalBlending,
   PerspectiveCamera,
   Points,
   Scene,
@@ -92,12 +92,13 @@ const fragmentShader = /* glsl */ `
     float d = length(gl_PointCoord - 0.5);
     if (d > 0.5) discard;
     float soft = smoothstep(0.5, 0.1, d);
-    // Ink on paper: pale navy valleys, deep navy peaks, like a heatmap.
+    // Light on dark: dim slate valleys, off-white peaks, like a heatmap.
     vec3 color = mix(uLow, uMid, smoothstep(0.0, 0.6, vHeat));
     color = mix(color, uHigh, smoothstep(0.6, 1.0, vHeat));
-    // The rolling band is burgundy, the page's pop colour.
+    // The rolling band is rose, the page's pop colour.
     color = mix(color, uPop, vScan * 0.9);
-    float alpha = soft * vAlpha * (0.3 + vHeat * 0.6 + vScan * 0.45);
+    // Kept low so the glow stays calm rather than bright.
+    float alpha = soft * vAlpha * (0.22 + vHeat * 0.48 + vScan * 0.4);
     gl_FragColor = vec4(color, alpha);
     #include <colorspace_fragment>
   }
@@ -157,19 +158,19 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
       uFlatten: { value: 0 },
       uSize: { value: small ? 34 : 30 },
       uPixelRatio: { value: pixelRatio },
-      uLow: { value: new Color('#9aa8b3') },
-      uMid: { value: new Color('#4a6a86') },
-      uHigh: { value: new Color('#16324b') },
-      uPop: { value: new Color('#9b1d42') },
+      uLow: { value: new Color('#414958') },
+      uMid: { value: new Color('#8d96a6') },
+      uHigh: { value: new Color('#e6e3dc') },
+      uPop: { value: new Color('#df7a95') },
     }
-    // Normal blending: on a light page, dots should darken rather than glow.
+    // Additive blending: on the dark page, dots glow where they gather.
     const material = new ShaderMaterial({
       uniforms,
       vertexShader,
       fragmentShader,
       transparent: true,
       depthWrite: false,
-      blending: NormalBlending,
+      blending: AdditiveBlending,
     })
     scene.add(new Points(geometry, material))
 

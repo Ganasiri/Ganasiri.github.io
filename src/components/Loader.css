@@ -6,8 +6,9 @@
   flex-direction: column;
   justify-content: space-between;
   padding: calc(var(--pad) * 0.8) var(--pad);
-  background: var(--butter);
-  color: var(--navy);
+  /* Same light as the page underneath, so lifting the curtain is seamless. */
+  background: var(--ambient), var(--bg);
+  color: var(--fg);
 }
 
 .loader__row {
@@ -50,7 +51,7 @@
 .loader__bar-fill {
   display: block;
   height: 100%;
-  background: var(--burgundy);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: 0 50%;
 }

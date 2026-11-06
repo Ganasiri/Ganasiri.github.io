@@ -28,14 +28,14 @@ export function Contact() {
 
         <div className="contact__row">
           <p className="contact__blurb">{contact.blurb}</p>
-          <MagneticLink href={`mailto:${profile.email}`} className="contact__cta" data-cursor="Email">
+          <MagneticLink href={`mailto:${profile.email}`} className="contact__cta glass" data-cursor="Email">
             {contact.cta}
             <span aria-hidden="true">↗</span>
           </MagneticLink>
         </div>
 
         <div className="contact__details">
-          <div className="contact__detail">
+          <div className="contact__detail glass">
             <p className="contact__detail-label mono">Email</p>
             <a className="contact__email" href={`mailto:${profile.email}`}>
               {profile.email}
@@ -44,7 +44,7 @@ export function Contact() {
           </div>
 
           {profile.links.length > 0 && (
-            <div className="contact__detail">
+            <div className="contact__detail glass">
               <p className="contact__detail-label mono">Elsewhere</p>
               <ul className="contact__links">
                 {profile.links.map((link) => (
@@ -59,7 +59,7 @@ export function Contact() {
             </div>
           )}
 
-          <div className="contact__detail">
+          <div className="contact__detail glass">
             <p className="contact__detail-label mono">Based in</p>
             <p>{profile.location}</p>
           </div>

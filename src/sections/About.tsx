@@ -89,7 +89,7 @@ export function About() {
 
         <dl className="about__stats">
           {about.stats.map((stat) => (
-            <div key={stat.label} className="about__stat">
+            <div key={stat.label} className="about__stat glass">
               <dt className="about__stat-label">
                 {stat.label}
                 {stat.detail && <span className="about__stat-detail">{stat.detail}</span>}
