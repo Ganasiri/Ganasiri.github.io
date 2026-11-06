@@ -159,7 +159,6 @@ export function Hero({ play, onSceneReady }: Props) {
           <div className="hero__lead">
             <div className="hero__content">
               <p className="hero__role hero__reveal">
-                <span className="hero__role-title">{profile.role}</span>
                 <span className="hero__focus" aria-hidden="true">
                   {profile.focus.map((area) => (
                     <em key={area} className="hero__focus-word">
@@ -167,7 +166,7 @@ export function Hero({ play, onSceneReady }: Props) {
                     </em>
                   ))}
                 </span>
-                <span className="visually-hidden">: {profile.focus.join(', ')}</span>
+                <span className="visually-hidden">{profile.focus.join(', ')}</span>
               </p>
             </div>
 

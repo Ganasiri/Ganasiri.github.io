@@ -61,7 +61,7 @@ export const profile = {
   displayName: 'Ganasiri',
   role: 'Product Analyst',
   /** Cycles after the role in the hero. */
-  focus: ['Data Analytics', 'Artificial Intelligence', 'Data Science'],
+  focus: ['Product Analytics', 'Artificial Intelligence', 'Data Science', 'Retrieval Augmented Generation'],
   location: 'Bengaluru, India',
   email: 'mmganasiri30@gmail.com',
   /** Profiles listed under "Elsewhere" in Contact; the block hides when empty. */
