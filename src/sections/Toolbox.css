@@ -32,7 +32,7 @@
   align-items: baseline;
 }
 
-/* A full stop after each name, solid rose even on the faint rows. */
+/* A full stop after each name, solid steel blue even on the faint rows. */
 .toolbox__sep {
   margin-inline-end: 0.4em;
   color: var(--accent);

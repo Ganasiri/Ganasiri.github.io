@@ -62,7 +62,7 @@ html.has-custom-cursor * {
 .cursor__ring.has-label .cursor__ring-shape {
   transform: scale(2.3);
   border-color: rgb(255 255 255 / 0.22);
-  background: var(--wine-strong);
+  background: var(--accent-fill-strong);
   opacity: 1;
 }
 

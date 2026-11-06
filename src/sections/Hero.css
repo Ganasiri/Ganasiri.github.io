@@ -28,26 +28,29 @@
   padding-bottom: clamp(1rem, 3vh, 2rem);
 }
 
-/* The copy sits just above the name, where the landscape meets the sky. */
-.hero__content {
+/* Name and copy form one block, centred vertically at the left. */
+.hero__main {
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: clamp(1.25rem, 3.5vh, 2.5rem);
 }
 
+/* The copy spans the name's width (80% of the line, see useFitText), so
+   the intro's right edge lines up with the last letter. */
 .hero__copy {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: end;
+  align-items: start;
   gap: 2rem;
-  padding-bottom: clamp(1rem, 4vh, 3rem);
+  max-width: 80%;
 }
 
 .hero__role {
   display: flex;
   flex-direction: column;
-  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-size: clamp(1.5rem, 2.6vw, 2.6rem);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -110,7 +113,7 @@
 }
 
 .hero__footer {
-  margin-top: clamp(0.75rem, 2vh, 1.5rem);
+  margin-top: clamp(1rem, 3vh, 2rem);
 }
 
 .hero__footer-inner {
@@ -156,17 +159,11 @@
 }
 
 @media (max-width: 767px) {
-  /* Copy stacks at the top; the landscape fills the space between it
-     and the name. */
-  .hero__content {
-    justify-content: flex-start;
-    padding-top: clamp(1rem, 4vh, 2.5rem);
-  }
-
+  /* Copy stacks under the name. */
   .hero__copy {
     grid-template-columns: 1fr;
     gap: 1.25rem;
-    padding-bottom: 0;
+    max-width: none;
   }
 
   .hero__intro {

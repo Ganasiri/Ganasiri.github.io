@@ -95,7 +95,7 @@ const fragmentShader = /* glsl */ `
     // Light on dark: dim slate valleys, off-white peaks, like a heatmap.
     vec3 color = mix(uLow, uMid, smoothstep(0.0, 0.6, vHeat));
     color = mix(color, uHigh, smoothstep(0.6, 1.0, vHeat));
-    // The rolling band is rose, the page's pop colour.
+    // The rolling band is steel blue, the page's pop colour.
     color = mix(color, uPop, vScan * 0.9);
     // Kept low so the glow stays calm rather than bright.
     float alpha = soft * vAlpha * (0.22 + vHeat * 0.48 + vScan * 0.4);
@@ -161,7 +161,7 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
       uLow: { value: new Color('#414958') },
       uMid: { value: new Color('#8d96a6') },
       uHigh: { value: new Color('#e6e3dc') },
-      uPop: { value: new Color('#df7a95') },
+      uPop: { value: new Color('#6a90b4') },
     }
     // Additive blending: on the dark page, dots glow where they gather.
     const material = new ShaderMaterial({

@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------
    A soft dark theme: graphite rather than black, warm off-white text,
-   and rose (burgundy lifted for dark backgrounds) as the one pop colour.
-   Text is 13.7:1 on the page, muted text 6.3:1 and rose 6.2:1.
+   and steel blue as the one pop colour.
+   Text is 13.7:1 on the page, muted text 6.3:1 and steel blue 4.8:1.
 
    Surfaces are glass in the style of iOS 27: a tinted, blurred fill, a
    lit rim brightest along the top, a darkened outer edge for separation
@@ -12,19 +12,20 @@
   --ink: #1e2126;
   --ink-raised: #24272d;
   --snow: #e6e3dc;
-  --rose: #df7a95;
-  /* Filled pop surfaces (main button, published badge) use wine glass. */
-  --wine: rgb(155 29 66 / 0.62);
-  --wine-strong: rgb(155 29 66 / 0.8);
+  --steel: #6a90b4;
+  /* Filled pop surfaces (main button, published badge) use deep blue
+     glass; off-white text on it is 7.6:1 (6.5:1 on the stronger fill). */
+  --accent-fill: rgb(58 92 128 / 0.62);
+  --accent-fill-strong: rgb(58 92 128 / 0.8);
 
   --bg: var(--ink);
   --fg: var(--snow);
   --muted: rgb(230 227 220 / 0.64);
   --line: rgb(230 227 220 / 0.12);
-  --accent: var(--rose);
+  --accent: var(--steel);
 
   --ambient:
-    radial-gradient(60vmax 44vmax at 96% -8%, rgb(155 29 66 / 0.16), transparent 70%),
+    radial-gradient(60vmax 44vmax at 96% -8%, rgb(106 144 180 / 0.12), transparent 70%),
     radial-gradient(56vmax 46vmax at -10% 108%, rgb(48 84 124 / 0.2), transparent 70%);
 
   /* Glass. The fill is for surfaces on the plain page; the tints are for
@@ -95,8 +96,8 @@
     --glass-tint: #23262b;
     --glass-tint-dense: #23262b;
     --glass-blur: none;
-    --wine: #6b1b34;
-    --wine-strong: #7d1f3c;
+    --accent-fill: #2f4660;
+    --accent-fill-strong: #36506c;
     --ambient: none;
   }
 }
@@ -223,7 +224,7 @@ em {
 }
 
 ::selection {
-  background: var(--rose);
+  background: var(--steel);
   color: var(--ink);
 }
 

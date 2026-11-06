@@ -42,8 +42,8 @@
   width: clamp(9rem, 15vw, 13rem);
   aspect-ratio: 1;
   border-radius: 50%;
-  /* Wine-tinted glass, like iOS's prominent glass buttons. */
-  background-color: var(--wine);
+  /* Deep blue glass, like iOS's prominent glass buttons. */
+  background-color: var(--accent-fill);
   color: var(--fg);
   font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   font-weight: 600;
@@ -58,7 +58,7 @@
 }
 
 .contact__cta:hover {
-  background-color: var(--wine-strong);
+  background-color: var(--accent-fill-strong);
 }
 
 .contact__details {

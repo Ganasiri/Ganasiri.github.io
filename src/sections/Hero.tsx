@@ -20,7 +20,8 @@ export function Hero({ play, onSceneReady }: Props) {
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const reducedMotion = useReducedMotion()
 
-  useFitText(nameRef)
+  // 20% smaller than full width, so the name leaves room for the scene.
+  useFitText(nameRef, 0.46, 0.8)
 
   useGSAP(
     () => {
@@ -133,31 +134,34 @@ export function Hero({ play, onSceneReady }: Props) {
       </Suspense>
 
       <div className="hero__inner container">
-        <div className="hero__content">
-          <div className="hero__copy">
-            <p className="hero__role hero__reveal">
-              <span className="hero__role-title">{profile.role}</span>
-              <span className="hero__focus" aria-hidden="true">
-                {profile.focus.map((area) => (
-                  <em key={area} className="hero__focus-word">
-                    {area}
-                  </em>
-                ))}
-              </span>
-              <span className="visually-hidden">: {profile.focus.join(', ')}</span>
-            </p>
-            <p className="hero__intro hero__reveal">
-              <Emphasis text={profile.intro} />
-            </p>
+        {/* Name and copy sit together at the left centre of the screen. */}
+        <div className="hero__main">
+          <h1 id="hero-title" className="hero__name">
+            <span className="visually-hidden">{profile.name}</span>
+            <span ref={nameRef} className="hero__name-text" aria-hidden="true">
+              {profile.displayName}
+            </span>
+          </h1>
+
+          <div className="hero__content">
+            <div className="hero__copy">
+              <p className="hero__role hero__reveal">
+                <span className="hero__role-title">{profile.role}</span>
+                <span className="hero__focus" aria-hidden="true">
+                  {profile.focus.map((area) => (
+                    <em key={area} className="hero__focus-word">
+                      {area}
+                    </em>
+                  ))}
+                </span>
+                <span className="visually-hidden">: {profile.focus.join(', ')}</span>
+              </p>
+              <p className="hero__intro hero__reveal">
+                <Emphasis text={profile.intro} />
+              </p>
+            </div>
           </div>
         </div>
-
-        <h1 id="hero-title" className="hero__name">
-          <span className="visually-hidden">{profile.name}</span>
-          <span ref={nameRef} className="hero__name-text" aria-hidden="true">
-            {profile.displayName}
-          </span>
-        </h1>
 
         <div className="hero__footer">
           <div className="hero__footer-inner mono hero__reveal">
