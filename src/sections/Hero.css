@@ -278,19 +278,6 @@
   transform: translateY(110%);
 }
 
-/* Phones: the longest area ("Retrieval Augmented Generation") wraps to a
-   second line instead of running off the screen. All words share one grid
-   cell, so the ticker keeps the tallest word's height and doesn't jump. */
-@media (max-width: 599px) {
-  .hero__focus {
-    width: 100%;
-  }
-
-  .hero__focus-word {
-    white-space: normal;
-  }
-}
-
 /* Name set as large as the width (and height) allows; see useFitText. */
 .hero__name {
   display: flex;
