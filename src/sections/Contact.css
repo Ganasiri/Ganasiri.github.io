@@ -48,7 +48,9 @@
   font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.01em;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    var(--glass-motion);
 }
 
 .contact__cta .magnetic__inner {

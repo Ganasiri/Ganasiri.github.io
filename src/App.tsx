@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Cursor } from './components/Cursor'
+import { LiquidGlass } from './components/LiquidGlass'
 import { Loader } from './components/Loader'
 import { Navbar } from './components/Navbar'
 import { ScrollProgress } from './components/ScrollProgress'
@@ -83,6 +84,7 @@ export default function App() {
       </a>
       {phase !== 'ready' && <Loader ready={ready} onReveal={handleReveal} onDone={handleDone} />}
       <Cursor />
+      <LiquidGlass />
       <ScrollProgress />
       <Navbar />
       <main id="main" tabIndex={-1}>
