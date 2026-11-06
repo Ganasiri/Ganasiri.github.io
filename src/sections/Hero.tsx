@@ -1,8 +1,6 @@
-import { useLenis } from 'lenis/react'
-import { lazy, Suspense, useRef, type MouseEvent } from 'react'
+import { lazy, Suspense, useRef } from 'react'
 import { HeroWidgets } from '../components/HeroWidgets'
-import { Emphasis, RollingText } from '../components/text'
-import { hero, profile } from '../content'
+import { profile } from '../content'
 import { useFitText } from '../hooks/useFitText'
 import { useMediaQuery, useReducedMotion } from '../hooks/useMediaQuery'
 import { gsap, MOTION_OK, ScrollTrigger, SplitText, useGSAP } from '../lib/gsap'
@@ -21,21 +19,12 @@ export function Hero({ play, onSceneReady }: Props) {
   const nameRef = useRef<HTMLSpanElement>(null)
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const reducedMotion = useReducedMotion()
-  const lenis = useLenis()
 
   // With widgets beside it, the name spans three quarters of its column,
   // which keeps it near half the screen width. Stacked on smaller screens,
   // it takes 60% of the line.
   const twoColumn = useMediaQuery('(min-width: 1024px)')
   useFitText(nameRef, 0.46, twoColumn ? 0.75 : 0.6)
-
-  const goToWork = (event: MouseEvent<HTMLAnchorElement>) => {
-    const target = document.getElementById('work')
-    if (!lenis || !target) return
-    event.preventDefault()
-    lenis.scrollTo(target, { duration: 1.5, onComplete: () => target.focus({ preventScroll: true }) })
-    history.replaceState(null, '', '#work')
-  }
 
   useGSAP(
     () => {
@@ -162,7 +151,7 @@ export function Hero({ play, onSceneReady }: Props) {
       </Suspense>
 
       <div className="hero__inner container">
-        {/* Role, name, intro and buttons on the left; widgets on the right.
+        {/* Role and name on the left; widgets on the right.
             The .hero__content wrappers fade on scroll, while the
             .hero__reveal elements inside them run the intro, so the two
             animations never share an element. */}
@@ -188,21 +177,6 @@ export function Hero({ play, onSceneReady }: Props) {
                 {profile.displayName}
               </span>
             </h1>
-
-            <div className="hero__content hero__copy">
-              <p className="hero__intro hero__reveal">
-                <Emphasis text={profile.intro} />
-              </p>
-              <div className="hero__actions hero__reveal">
-                <a href="#work" className="hero__button hero__button--primary glass" onClick={goToWork}>
-                  <RollingText>{hero.primaryCta}</RollingText>
-                  <span aria-hidden="true">→</span>
-                </a>
-                <a href={`mailto:${profile.email}`} className="hero__button glass" data-cursor="Email">
-                  <RollingText>{hero.secondaryCta}</RollingText>
-                </a>
-              </div>
-            </div>
           </div>
 
           <aside className="hero__content hero__widgets" aria-label="At a glance">

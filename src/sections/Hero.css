@@ -37,7 +37,7 @@
   gap: clamp(2rem, 5vw, 5rem);
 }
 
-/* Role above the name, intro and buttons below, as one block. */
+/* The role sits directly above the name, as one block. */
 .hero__lead {
   display: grid;
   justify-items: start;
@@ -47,39 +47,6 @@
 
 .hero__name {
   width: 100%;
-}
-
-.hero__copy {
-  display: grid;
-  justify-items: start;
-  gap: clamp(1.25rem, 3vh, 1.75rem);
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.hero__button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.35rem;
-  border-radius: 999px;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-
-.hero__button--primary {
-  background-color: var(--accent-fill);
-  transition:
-    background-color 0.3s ease,
-    var(--glass-motion);
-}
-
-.hero__button--primary:hover {
-  background-color: var(--accent-fill-strong);
 }
 
 /* ---------------------------- Widgets --------------------------- */
@@ -177,6 +144,86 @@
   color: var(--muted);
 }
 
+/* Smart stack: results take turns, each held while the bar fills. */
+.widget--stack {
+  overflow: hidden;
+}
+
+.widget__label--split {
+  justify-content: space-between;
+}
+
+.widget__dots {
+  display: flex;
+  gap: 0.1rem;
+  margin-right: -0.3rem;
+}
+
+/* The button is a comfortable target; the dot inside it stays small. */
+.widget__dot {
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.widget__dot::before {
+  content: '';
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s var(--ease-out);
+}
+
+.widget__dot.is-active::before {
+  opacity: 1;
+  transform: scale(1.3);
+  background: var(--accent);
+}
+
+.widget__slide {
+  display: grid;
+  gap: 0.35rem;
+  animation: widget-slide-in 0.7s var(--ease-out) both;
+}
+
+@keyframes widget-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+    filter: blur(4px);
+  }
+}
+
+.widget__timer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  opacity: 0.7;
+  transform-origin: left;
+  animation: widget-timer 4.5s linear both;
+}
+
+.widget--stack.is-paused .widget__timer {
+  animation-play-state: paused;
+}
+
+@keyframes widget-timer {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 /* Lines break between facts, never inside one. */
 .widget__nowrap {
   white-space: nowrap;
@@ -229,18 +276,6 @@
 /* Only the first word shows until the animation (if any) takes over. */
 .hero__focus-word + .hero__focus-word {
   transform: translateY(110%);
-}
-
-.hero__intro {
-  max-width: 28ch;
-  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-  line-height: 1.45;
-  color: color-mix(in srgb, var(--fg) 82%, transparent);
-}
-
-.hero__intro em {
-  color: var(--fg);
-  font-size: 1.12em;
 }
 
 /* Name set as large as the width (and height) allows; see useFitText. */
@@ -352,7 +387,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll-line,
-  .widget__live::after {
+  .widget__live::after,
+  .widget__slide {
     animation: none;
+  }
+
+  /* No timer, so the stack holds still; the dots still switch results. */
+  .widget__timer {
+    display: none;
   }
 }
