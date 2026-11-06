@@ -5,9 +5,12 @@ import {
   BufferGeometry,
   Color,
   PerspectiveCamera,
+  Plane,
   Points,
+  Raycaster,
   Scene,
   ShaderMaterial,
+  Vector2,
   Vector3,
   WebGLRenderer,
 } from 'three'
@@ -27,6 +30,8 @@ type Props = {
 const WIDTH = 30
 const NEAR_Z = 3
 const FAR_Z = -19
+/** The pointer reaches no further back than this, where dots still show. */
+const REACH_Z = -9
 const f = (n: number) => n.toFixed(2)
 
 /** Camera at the start (a low view over the field) and after scrolling. */
@@ -43,10 +48,13 @@ const vertexShader = /* glsl */ `
   uniform float uFlatten;
   uniform float uSize;
   uniform float uPixelRatio;
+  uniform vec2 uPointer;
+  uniform float uStir;
   attribute float aSeed;
   varying float vHeat;
   varying float vAlpha;
   varying float vScan;
+  varying float vGlow;
 
   // A slowly drifting data surface made of a few interfering waves.
   float surface(vec2 p, float t) {
@@ -58,8 +66,18 @@ const vertexShader = /* glsl */ `
   void main() {
     vec3 p = position;
     float h = surface(p.xz, uTime);
-    p.y = h * mix(1.0, 0.4, uFlatten);
-    vHeat = smoothstep(-0.3, 0.75, h);
+
+    // The pointer raises a soft swell in the field, ringed by ripples
+    // that spread outwards, like a fingertip on water. uStir grows while
+    // the pointer moves and settles back when it rests.
+    float d = distance(p.xz, uPointer);
+    float swell = exp(-d * d * 0.16);
+    float ripple = sin(d * 2.2 - uTime * 4.2) * exp(-d * 0.32) * (1.0 - swell);
+    float touch = uStir * (swell * 0.95 + ripple * 0.22);
+    vGlow = uStir * swell;
+
+    p.y = (h + touch) * mix(1.0, 0.4, uFlatten);
+    vHeat = smoothstep(-0.3, 0.75, h + touch * 0.7);
 
     // A bright band rolls across the field from the horizon to the viewer.
     float span = ${f(NEAR_Z - FAR_Z + 8)};
@@ -69,7 +87,7 @@ const vertexShader = /* glsl */ `
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mvPosition;
     float depth = -mvPosition.z;
-    float size = uSize * uPixelRatio * (0.75 + aSeed * 0.5) * (1.0 + vScan * 0.7) / depth;
+    float size = uSize * uPixelRatio * (0.75 + aSeed * 0.5) * (1.0 + vScan * 0.7 + vGlow * 0.6) / depth;
     gl_PointSize = min(size, 7.0 * uPixelRatio);
 
     // Fade into the distance and towards the side edges.
@@ -87,6 +105,7 @@ const fragmentShader = /* glsl */ `
   varying float vHeat;
   varying float vAlpha;
   varying float vScan;
+  varying float vGlow;
 
   void main() {
     float d = length(gl_PointCoord - 0.5);
@@ -96,9 +115,9 @@ const fragmentShader = /* glsl */ `
     vec3 color = mix(uLow, uMid, smoothstep(0.0, 0.6, vHeat));
     color = mix(color, uHigh, smoothstep(0.6, 1.0, vHeat));
     // The rolling band is steel blue, the page's pop colour.
-    color = mix(color, uPop, vScan * 0.9);
+    color = mix(color, uPop, max(vScan * 0.9, vGlow * 0.75));
     // Kept low so the glow stays calm rather than bright.
-    float alpha = soft * vAlpha * (0.22 + vHeat * 0.48 + vScan * 0.4);
+    float alpha = soft * vAlpha * (0.22 + vHeat * 0.48 + vScan * 0.4 + vGlow * 0.3);
     gl_FragColor = vec4(color, alpha);
     #include <colorspace_fragment>
   }
@@ -158,6 +177,9 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
       uFlatten: { value: 0 },
       uSize: { value: small ? 34 : 30 },
       uPixelRatio: { value: pixelRatio },
+      // Where the pointer lands on the field (x, z), and how stirred it is.
+      uPointer: { value: new Vector2(0, FAR_Z) },
+      uStir: { value: 0 },
       uLow: { value: new Color('#414958') },
       uMid: { value: new Color('#8d96a6') },
       uHigh: { value: new Color('#e6e3dc') },
@@ -174,10 +196,28 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
     })
     scene.add(new Points(geometry, material))
 
-    const pointer = { x: 0, y: 0 }
+    const pointer = { x: 0, y: 0, inside: false }
     const sway = { x: 0, y: 0 }
     const position = new Vector3()
     const target = new Vector3()
+
+    // Pointer on the field: cast a ray from the camera onto the ground. Above
+    // the horizon the ray misses, so it lands on a wall at the far edge
+    // instead, and the pointer still stirs the distant ridge.
+    const raycaster = new Raycaster()
+    const ndc = new Vector2()
+    const ground = new Plane(new Vector3(0, 1, 0), 0)
+    const backWall = new Plane(new Vector3(0, 0, 1), -REACH_Z)
+    const hit = new Vector3()
+    const aim = new Vector2(0, FAR_Z)
+    let energy = 0 // builds with pointer movement, decays at rest
+    const locate = () => {
+      ndc.set(pointer.x, -pointer.y)
+      raycaster.setFromCamera(ndc, camera)
+      const onGround = raycaster.ray.intersectPlane(ground, hit)
+      if (!onGround || hit.z < REACH_Z) raycaster.ray.intersectPlane(backWall, hit)
+      aim.set(hit.x, Math.max(hit.z, REACH_Z))
+    }
 
     const render = () => {
       const t = uniforms.uFlatten.value
@@ -227,15 +267,30 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
     })
 
     const onPointerMove = (event: PointerEvent) => {
-      pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-      pointer.y = (event.clientY / window.innerHeight) * 2 - 1
+      const x = (event.clientX / window.innerWidth) * 2 - 1
+      const y = (event.clientY / window.innerHeight) * 2 - 1
+      if (pointer.inside) energy = Math.min(1, energy + Math.hypot(x - pointer.x, y - pointer.y) * 2.5)
+      pointer.x = x
+      pointer.y = y
+      pointer.inside = true
+    }
+    const onPointerOut = (event: PointerEvent) => {
+      if (!event.relatedTarget) pointer.inside = false
     }
 
     const tick = (_time: number, deltaTime: number) => {
       if (!visibility?.isActive) return
-      uniforms.uTime.value += Math.min(deltaTime, 50) / 1000
+      const dt = Math.min(deltaTime, 50) / 1000
+      uniforms.uTime.value += dt
       sway.x += (pointer.x * 0.9 - sway.x) * 0.04
       sway.y += (-pointer.y * 0.25 - sway.y) * 0.04
+
+      // A resting pointer keeps a gentle swell; moving it lifts more.
+      energy *= Math.exp(-dt * 1.6)
+      const stir = pointer.inside ? 0.45 + energy * 0.75 : 0
+      uniforms.uStir.value += (stir - uniforms.uStir.value) * 0.06
+      if (pointer.inside) locate()
+      uniforms.uPointer.value.lerp(aim, 0.08)
       render()
     }
 
@@ -247,11 +302,13 @@ export default function HeroScene({ onReady, morphTrigger, fadeTrigger, reducedM
     if (!reducedMotion) {
       gsap.ticker.add(tick)
       window.addEventListener('pointermove', onPointerMove, { passive: true })
+      document.addEventListener('pointerout', onPointerOut)
     }
 
     return () => {
       gsap.ticker.remove(tick)
       window.removeEventListener('pointermove', onPointerMove)
+      document.removeEventListener('pointerout', onPointerOut)
       observer.disconnect()
       ctx.revert()
       geometry.dispose()

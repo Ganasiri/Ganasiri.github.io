@@ -64,11 +64,25 @@ export const profile = {
   focus: ['Data Analytics', 'Artificial Intelligence', 'Data Science'],
   intro: 'I turn product data into decisions, and build AI that people can *trust*.',
   location: 'Bengaluru, India',
+  /** IANA time zone for the live clock widget in the hero. */
+  timeZone: 'Asia/Kolkata',
   email: 'mmganasiri30@gmail.com',
   /** Profiles listed under "Elsewhere" in Contact; the block hides when empty. */
   links: [
     // { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-handle' },
   ] as Link[],
+}
+
+/** Hero buttons and widget labels. The widgets' facts come from
+ *  `experience`, `profile` and `projects`, so they stay in step. */
+export const hero = {
+  primaryCta: 'See my work',
+  secondaryCta: 'Email me',
+  widgets: {
+    now: 'Currently',
+    time: 'Local time',
+    research: 'Research',
+  },
 }
 
 /** In-page navigation. Each id must match a section id. */

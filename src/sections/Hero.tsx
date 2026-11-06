@@ -1,8 +1,10 @@
-import { lazy, Suspense, useRef } from 'react'
-import { Emphasis } from '../components/text'
-import { profile } from '../content'
+import { useLenis } from 'lenis/react'
+import { lazy, Suspense, useRef, type MouseEvent } from 'react'
+import { HeroWidgets } from '../components/HeroWidgets'
+import { Emphasis, RollingText } from '../components/text'
+import { hero, profile } from '../content'
 import { useFitText } from '../hooks/useFitText'
-import { useReducedMotion } from '../hooks/useMediaQuery'
+import { useMediaQuery, useReducedMotion } from '../hooks/useMediaQuery'
 import { gsap, MOTION_OK, ScrollTrigger, SplitText, useGSAP } from '../lib/gsap'
 import './Hero.css'
 
@@ -19,10 +21,21 @@ export function Hero({ play, onSceneReady }: Props) {
   const nameRef = useRef<HTMLSpanElement>(null)
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const reducedMotion = useReducedMotion()
+  const lenis = useLenis()
 
-  // Just under half the line (80% of full width, then 40% smaller), so the
-  // name leaves room for the role and the scene.
-  useFitText(nameRef, 0.46, 0.48)
+  // With widgets beside it, the name spans three quarters of its column,
+  // which keeps it near half the screen width. Stacked on smaller screens,
+  // it takes 60% of the line.
+  const twoColumn = useMediaQuery('(min-width: 1024px)')
+  useFitText(nameRef, 0.46, twoColumn ? 0.75 : 0.6)
+
+  const goToWork = (event: MouseEvent<HTMLAnchorElement>) => {
+    const target = document.getElementById('work')
+    if (!lenis || !target) return
+    event.preventDefault()
+    lenis.scrollTo(target, { duration: 1.5, onComplete: () => target.focus({ preventScroll: true }) })
+    history.replaceState(null, '', '#work')
+  }
 
   useGSAP(
     () => {
@@ -105,6 +118,20 @@ export function Hero({ play, onSceneReady }: Props) {
           ease: 'none',
           scrollTrigger: { ...scrub, end: '55% top' },
         })
+
+        // The widgets float a little against the pointer, as if nearer the
+        // viewer than the landscape behind them.
+        const track = root.querySelector<HTMLElement>('.hero__widgets-track')
+        if (!track || !matchMedia('(hover: hover) and (pointer: fine)').matches) return
+        const ease = { duration: 1.2, ease: 'power3.out' }
+        const floatX = gsap.quickTo(track, 'x', ease)
+        const floatY = gsap.quickTo(track, 'y', ease)
+        const onMove = (event: PointerEvent) => {
+          floatX((event.clientX / window.innerWidth - 0.5) * -22)
+          floatY((event.clientY / window.innerHeight - 0.5) * -16)
+        }
+        window.addEventListener('pointermove', onMove, { passive: true })
+        return () => window.removeEventListener('pointermove', onMove)
       })
     },
     { scope: rootRef },
@@ -135,17 +162,13 @@ export function Hero({ play, onSceneReady }: Props) {
       </Suspense>
 
       <div className="hero__inner container">
-        {/* Name and copy sit together at the left centre of the screen. */}
+        {/* Role, name, intro and buttons on the left; widgets on the right.
+            The .hero__content wrappers fade on scroll, while the
+            .hero__reveal elements inside them run the intro, so the two
+            animations never share an element. */}
         <div className="hero__main">
-          <h1 id="hero-title" className="hero__name">
-            <span className="visually-hidden">{profile.name}</span>
-            <span ref={nameRef} className="hero__name-text" aria-hidden="true">
-              {profile.displayName}
-            </span>
-          </h1>
-
-          <div className="hero__content">
-            <div className="hero__copy">
+          <div className="hero__lead">
+            <div className="hero__content">
               <p className="hero__role hero__reveal">
                 <span className="hero__role-title">{profile.role}</span>
                 <span className="hero__focus" aria-hidden="true">
@@ -157,11 +180,34 @@ export function Hero({ play, onSceneReady }: Props) {
                 </span>
                 <span className="visually-hidden">: {profile.focus.join(', ')}</span>
               </p>
+            </div>
+
+            <h1 id="hero-title" className="hero__name">
+              <span className="visually-hidden">{profile.name}</span>
+              <span ref={nameRef} className="hero__name-text" aria-hidden="true">
+                {profile.displayName}
+              </span>
+            </h1>
+
+            <div className="hero__content hero__copy">
               <p className="hero__intro hero__reveal">
                 <Emphasis text={profile.intro} />
               </p>
+              <div className="hero__actions hero__reveal">
+                <a href="#work" className="hero__button hero__button--primary glass" onClick={goToWork}>
+                  <RollingText>{hero.primaryCta}</RollingText>
+                  <span aria-hidden="true">→</span>
+                </a>
+                <a href={`mailto:${profile.email}`} className="hero__button glass" data-cursor="Email">
+                  <RollingText>{hero.secondaryCta}</RollingText>
+                </a>
+              </div>
             </div>
           </div>
+
+          <aside className="hero__content hero__widgets" aria-label="At a glance">
+            <HeroWidgets />
+          </aside>
         </div>
 
         <div className="hero__footer">
